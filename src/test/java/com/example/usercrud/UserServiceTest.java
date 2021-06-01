@@ -34,6 +34,6 @@ public class UserServiceTest {
     @Test
     public void findById(){
         when(repository.findById(Integer.toUnsignedLong(123))).thenReturn(Optional.of(new User(123,"ABC","abc@email.com")));
-        assertNotNull(service.findById(Integer.toUnsignedLong(121)));
+        assertNotNull(service.findById(Integer.toUnsignedLong(123)));
     }
 }
