@@ -63,10 +63,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <source>1.11</source>
-                    <target>1.11</target>
-                </configuration>
             </plugin>
         </plugins>
         <finalName>user-crud</finalName>

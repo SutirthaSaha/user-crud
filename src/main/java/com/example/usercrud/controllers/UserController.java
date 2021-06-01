@@ -2,6 +2,7 @@ package com.example.usercrud.controllers;
 
 import com.example.usercrud.entities.User;
 import com.example.usercrud.repositories.UserRepository;
+import com.example.usercrud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,16 +16,16 @@ import javax.validation.Valid;
 @Controller
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/index")
     public String showUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "index";
     }
 
@@ -39,13 +40,13 @@ public class UserController {
             return "add-user";
         }
 
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/index";
     }
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        User user = userService.findById(id);
         model.addAttribute("user", user);
 
         return "update-user";
@@ -58,15 +59,14 @@ public class UserController {
             return "update-user";
         }
 
-        userRepository.save(user);
-
+        userService.save(user);
         return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        userRepository.delete(user);
+        User user = userService.findById(id);
+        userService.delete(user);
 
         return "redirect:/index";
     }
