@@ -2,7 +2,7 @@
 - hosts: dev
   become: True
   tasks:
-    - name: Install apache httpd  (state=present is optional)
-      apt:
-        name: apache2
-        state: present
+    - name: install the latest version of Apache
+      yum:
+        name: httpd
+        state: latest
