@@ -2,7 +2,7 @@
 - hosts: dev
   become: True
   tasks:
-    -name: Install python pip
-     apt:
-       name: python-pip
-       state: latest
+    - name: Install apache httpd  (state=present is optional)
+      apt:
+        name: apache2
+        state: present
