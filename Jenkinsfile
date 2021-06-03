@@ -44,21 +44,17 @@ pipeline {
             }
         }
 
-        // stage('Acceptance Stage') {
-        //     steps {
-        //         input 'Approved ?'
-        //         // sh 'docker rm -f user_crud'
-        //     }
-        // }
+        stage('Acceptance Stage') {
+            steps {
+                input 'Approved ?'
+                // sh 'docker rm -f user_crud'
+            }
+        }
 
-    //   stage('Deploy to Prod Server') {
-    //       steps {
-    //             sshagent(['prod_ec2_cred']) {
-    //                 sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.82.228.29 sudo docker ps -f name=user-crud -q | xargs --no-run-if-empty docker container stop'
-    //                 sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.82.228.29 sudo docker container ls -a -fname=user-crud -q | xargs -r docker container rm'
-    //                 sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.82.228.29 sudo docker run -p 8090:8090 -d suti12/user-crud'
-    //             }
-    //       }
-    //   }
+        stage('Deploy to Prod Server') {
+            steps {
+                ansiblePlaybook credentialsId: 'linux_cred', disableHostKeyChecking: true, installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
+            }
+        }
     }
 }
