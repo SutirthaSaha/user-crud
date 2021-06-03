@@ -1,23 +1,13 @@
 pipeline {
     agent any
     environment {
-        //once you sign up for Docker hub, use that user_id here
         registry = "suti12/user-crud"
-        //- update your credentials ID after creating credentials for connecting to Docker Hub
-        registryCredential = 'docker_id'
-        dockerImage = ''
         DOCKER_TAG = getVersion()
     }
     triggers {
         pollSCM('* * * * *')
     }
     stages {
-//         stage('Checkout') {
-//             steps {
-//                 git 'https://github.com/SutirthaSaha/user-crud.git'
-//             }
-//         }
-
         stage('Build and Test') {
             steps{
                 sh "mvn clean install"
@@ -47,7 +37,6 @@ pipeline {
         stage('Acceptance Stage') {
             steps {
                 input 'Approved ?'
-                // sh 'docker rm -f user_crud'
             }
         }
 
