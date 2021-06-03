@@ -28,7 +28,7 @@ public class UserServiceTest {
     @Test
     public void findAll(){
         when(repository.findAll()).thenReturn(Stream.of(new User(123,"ABC","abc@email.com"), new User(124, "DEF", "def@email.com")).collect(Collectors.toList()));
-        assertEquals(1, service.findAll().spliterator().getExactSizeIfKnown());
+        assertEquals(2, service.findAll().spliterator().getExactSizeIfKnown());
     }
 
     @Test
