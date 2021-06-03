@@ -12,11 +12,11 @@ pipeline {
         pollSCM('* * * * *')
     }
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/SutirthaSaha/user-crud.git'
-            }
-        }
+//         stage('Checkout') {
+//             steps {
+//                 git 'https://github.com/SutirthaSaha/user-crud.git'
+//             }
+//         }
 
         stage('Build and Test') {
             steps{
