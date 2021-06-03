@@ -6,6 +6,7 @@ pipeline {
         //- update your credentials ID after creating credentials for connecting to Docker Hub
         registryCredential = 'docker_id'
         dockerImage = ''
+        DOCKER_TAG = getVersion()
     }
     triggers {
         pollSCM('* * * * *')
@@ -25,12 +26,11 @@ pipeline {
 
         stage('Build and Upload Image to Repo') {
             steps{
-                script {
-                    dockerImage = docker.build registry
-                    docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push()
-                    }
+                sh "docker build . -t suti12/user-crud:${DOCKER_TAG} "
+                withCredentials([string(credentialsId: 'docker-hub-pwd', variable: 'docker_pwd')]) {
+                    sh "docker login -u suti12 -p ${docker_pwd}"
                 }
+                sh "docker push suti12/user-crud:${DOCKER_TAG} "
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
                 sh 'docker ps -f name=user_crud -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a -fname=user_crud -q | xargs -r docker container rm'
                 script {
-                    dockerImage.run("-p 8090:8090 --name user_crud")
+                    sh "docker run -d -p 8090:8090 --name user_crud suti12/user-crud"
                 }
             }
         }
@@ -53,8 +53,13 @@ pipeline {
 
         stage('Deploy to Prod Server') {
             steps {
-                ansiblePlaybook credentialsId: 'linux_cred', disableHostKeyChecking: true, installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
+                ansiblePlaybook credentialsId: 'linux_cred', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
             }
         }
     }
+}
+
+def getVersion(){
+    def commitHash = sh label: '', returnStdout: true, script: 'git rev-parse --short HEAD'
+    return commitHash
 }
