@@ -22,7 +22,7 @@
     - name: Start the container
       docker_container:
         name: user_crud
-        image: "suti12/user-crud"
+        image: "suti12/user-crud:{{DOCKER_TAG}}"
         state: started
         published_ports:
           - 0.0.0.0:8090:8090
