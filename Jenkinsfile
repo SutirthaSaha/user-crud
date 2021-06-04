@@ -24,6 +24,12 @@ pipeline {
             }
         }
 
+        stage('Static Code Analysis') {
+            steps{
+                sh 'mvn sonar:sonar -Dsonar.projectKey=user-crud -Dsonar.host.url=http://18.188.44.205:9000 -Dsonar.login=ffd0c7c0b025ac9c814afc1770aedfcc6ddc1c59'
+            }
+        }
+
         stage('Deploy to Test Server') {
             steps {
                 sh 'docker ps -f name=user_crud -q | xargs --no-run-if-empty docker container stop'
