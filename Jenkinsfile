@@ -15,8 +15,8 @@ pipeline {
         }
 
         stage('Static Code Analysis') {
-            steps{
-                sh 'mvn sonar:sonar -Dsonar.projectKey=user-crud -Dsonar.host.url=http://18.188.44.205:9000 -Dsonar.login=ffd0c7c0b025ac9c814afc1770aedfcc6ddc1c59'
+            withSonarQubeEnv('SonarQube') {
+                sh "mvn sonar:sonar"
             }
         }
 
