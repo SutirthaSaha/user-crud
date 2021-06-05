@@ -14,6 +14,12 @@ pipeline {
             }
         }
 
+        stage('Static Code Analysis') {
+            steps{
+                sh 'mvn sonar:sonar -Dsonar.projectKey=user-crud -Dsonar.host.url=http://18.188.44.205:9000 -Dsonar.login=ffd0c7c0b025ac9c814afc1770aedfcc6ddc1c59'
+            }
+        }
+
         stage('Build and Upload Image to Repo') {
             steps{
                 sh "docker build . -t suti12/user-crud:${DOCKER_TAG} "
@@ -21,12 +27,6 @@ pipeline {
                     sh "docker login -u suti12 -p ${docker_pwd}"
                 }
                 sh "docker push suti12/user-crud:${DOCKER_TAG} "
-            }
-        }
-
-        stage('Static Code Analysis') {
-            steps{
-                sh 'mvn sonar:sonar -Dsonar.projectKey=user-crud -Dsonar.host.url=http://18.188.44.205:9000 -Dsonar.login=ffd0c7c0b025ac9c814afc1770aedfcc6ddc1c59'
             }
         }
 
