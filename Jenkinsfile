@@ -37,7 +37,7 @@ pipeline {
                 sh 'docker ps -f name=user_crud -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a -fname=user_crud -q | xargs -r docker container rm'
                 script {
-                    sh "docker run -d -p 8090:8090 --name user_crud suti12/user-crud"
+                    sh "docker run -d -p 8090:8090 --name user_crud suti12/user-crud:${DOCKER_TAG} "
                 }
             }
         }
